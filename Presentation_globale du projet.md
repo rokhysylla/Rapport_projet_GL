@@ -19,11 +19,28 @@ Les principales fonctionnalités de Gson sont :
 - Support d’objets complexes avec héritage et structures imbriquées
 
 ### Comment lancer / utiliser le projet
-Pour lancer le projet GSON il faut d'abord avoir la version java 17. Après avoir réussi à intaller java 17,on se met sur l'environnement de travail c'est à dire "être sur le dossier gson dans le terminal" puis on fait 
-`mvn compile` pour compiler le projet
-`mvn test` pour exécuter les tests
-`mvn package` pour exécuter le jar 
-
-Toutefois il y'a un petit soucis lors de l'éxécution des test on rencontre une erreur ...
+Gson n'est pas une application éxécutable mais une bibliothèque Java.Du coup pour l'utiliser ,il faut l'ajouter comme dépendance dans un projet Java.
+Ensuite on pourra utiliser l'API dans le code java 
+### Résultat du projet
+Le projet ne produit pas un programme  ou un fichier éxécutable.Le résultat sera une chaine JSON ou un objet Java . (à revoir)
 
 ## Description du projet
+Lors de l’audit du projet Gson, nous avons cherché un fichier README décrivant le projet, son installation et son utilisation.  
+Cependant, aucun README complet et détaillé n’a été trouvé dans le dépôt analysé, ou celui-ci est très limité et non suffisant pour comprendre le projet en profondeur.
+
+La principale source d’information disponible est une documentation partielle décrivant l’objectif général de la bibliothèque, mais sans fournir de détails sur l’architecture interne ou la structure du code.
+
+## Historique du logiciel 
+### Analyse du git 
+Lors de l’analyse du dépôt GitHub,nous avons vu que ce projet dispose de trois contributeurs.
+Le projet est actuellement en mode maintenance,il est d'ailleurs toujours actif .
+Le dépôt contient environ dix branches. La branche principale main est active et contient les versions officielles du projet.  
+Les autres branches sont anciennes (plusieurs années) et ne semblent plus utilisée
+Environ 97 Pull Requests ont été identifiées.  
+Certaines Pull Requests sont acceptées (merge), ce qui est indiqué par un statut vert, tandis que d’autres sont refusées ou fermées sans intégration, indiquées par un statut rouge ou sans statut.
+
+
+## Analyse approfondie
+
+### Tests
+On va s'interesser aux tests
