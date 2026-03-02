@@ -63,7 +63,7 @@ L’absence d’erreurs et d’échecs indique une bonne stabilité des tests ex
 **Repartition des tests par module**
 - Gson (JSON)	4536 test unitaires soit un ratio de 4536/113​=40.14 environ 40 test par classe
 
-- Extra	40 test unitaires soit un ratio de 40/14 = 2.85 environ 3test par classe
+- Extra	40 test unitaires soit un ratio de 40/14 = 2.85 environ 3 test par classe
 
 - Proto	12 test unitaires soit un ratio de 12/3 = 4 environ 4 test par classe
 
@@ -106,9 +106,11 @@ Certaines classes présentes dans src/main ne disposent pas de classes de tests 
 On observe que certaines méthodes de test contiennent plusieurs assertions.
 En théorie, un test devrait vérifier un comportement précis.
 Un test = un comportement vérifié
+test/com.google.gson/GsonTest
 
 `Présence de classes non destinées aux tests dans src/test`
-On remarque que dans le dossier src/test, certaines classes ont été créées et ne correspondent pas à des classes de test.
+On remarque que dans le dossier src/test, certaines classes ont été créées et ne correspondent pas à des classes de test. EXemple dans test/com.google.gson/GsonTypeAdapterTest et test/com.google.gson/GsonTest
+Et de la classe test/com.google.gson/primitiveTypeAdapter
 
 Cela peut poser plusieurs problèmes :
 
@@ -130,8 +132,10 @@ On distingue :
 - Des commentaires Javadoc documentant les méthodes et paramètres.
 
 - Des commentaires de licence et de copyright en en-tête des fichiers.
+    Dans les classes du package gson/com.google.gson.internal.bind 
 
 - Des lignes de code commentées (code désactivé).
+DDans la classe com.google.gson/Gson.java par exemple
 
 **Petite conclusion**
 Bien que le taux de commentaires soit élevé quantitativement, une partie significative ne contribue pas directement à la documentation fonctionnelle du projet.
