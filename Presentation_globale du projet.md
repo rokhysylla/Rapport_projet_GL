@@ -67,7 +67,7 @@ L’absence d’erreurs et d’échecs indique une bonne stabilité des tests ex
 
 - Proto	12 test unitaires soit un ratio de 12/3 = 4 environ 4 test par classe
 
-Les modules Test-Graal-Native et Test-JPMS contiennent respectivement 10 et 12 test unitaires Cependant, ils ne contiennent pas de classes Java dans src/main, ce qui suggère qu’il s’agit de modules techniques ou de tests d’intégration spécifiques.
+Les modules Test-Graal-Native et Test-JPMS contiennent respectivement 10 et 12 test unitaires Cependant, ils ne contiennent pas de classes Java dans src/main.
 
 - le module test-shrinker contient 33 classes, mais aucun test associé n’a été identifié, ce qui constitue un point faible en termes de couverture et de validation.
 
@@ -117,7 +117,9 @@ Difficulté à distinguer code de production et code de test
 En principe, le dossier src/test devrait contenir uniquement :
 des classes de test
 éventuellement des classes utilitaires dédiées aux tests (mocks...)
-### Les commentaires
+
+
+### Commentaires
 Le projet comporte 13 986 lignes de code pour 5 119 lignes de commentaires, soit un taux global de 36,6 %.
 
 Dans le module principal (gson), on observe 11 198 lignes de code et 4 545 lignes de commentaires, soit un taux d’environ 40,5 %.
@@ -130,4 +132,32 @@ On distingue :
 - Des commentaires de licence et de copyright en en-tête des fichiers.
 
 - Des lignes de code commentées (code désactivé).
+
+**Petite conclusion**
+Bien que le taux de commentaires soit élevé quantitativement, une partie significative ne contribue pas directement à la documentation fonctionnelle du projet.
+Les commentaires de licence augmentent artificiellement le taux global sans améliorer la compréhension fonctionnelle du code.Pareil pour les codes commenté .Ce n'est pas recommandé.
+
+### Duplication 
+On va s’intéresser ici au code dupliqué.Dans ce projet nous avons au total 358 lignes dupliquées
+
+119 extra (8.7%) 
+145 gson (0.7%)
+94 metrics (9.4%)
+
+On observe que le module Gson possède le plus grand nombre de lignes dupliquées en valeur absolue.
+Cependant, son pourcentage de duplication reste très faible (0,7 %) en raison de la taille importante du module.
+
+À l’inverse, les modules Extra et Metrics présentent un pourcentage plus élevé, ce qui indique une duplication proportionnellement plus importante.
+- étudier si ces duplications peuvent être supprimées et comment
+
+**Analyse de la duplication**
+L’analyse montre que certaines duplications correspondent aux en-têtes de licence Apache présents dans chaque fichier source. Elles ne constituent pas un problème de conception.
+
+Concernant le code métier, certaines structures similaires apparaissent dans la classe TypeAdapters, notamment dans les méthodes read() et write() des différents TypeAdapter. Ces blocs présentent des ressemblances structurelles (gestion du JsonToken.NULL, gestion des exceptions).
+Les modules Extra et Metrics présentent un taux proportionnellement plus élevé (8,7 % et 9,4 %)
+### Code déprécié
+L’analyse SonarQube indique la présence d’éléments dépréciés dans le projet.
+
+Un élément déprécié correspond à une méthode ou une classe marquée comme obsolète, généralement parce qu’une alternative plus récente ou plus performante existe.
+
 
