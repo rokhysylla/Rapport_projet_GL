@@ -89,7 +89,7 @@ Les autres modules présentent un nombre très faible de tests, ce qui suggère 
 `Organisation`
 Bien que le projet comporte un nombre très important de tests, leur organisation structurelle présente certaines limites.
 
-Dans le module JSON, le dossier src/main est structuré en plusieurs sous-packages (bin, util, reflect, sql, stream, etc.), contenant des classes concrètes, des interfaces, des classes abstraites et des annotations.
+Dans le module gson, le dossier src/main est structuré en plusieurs sous-packages (com.google.gson, reflect, stream, etc.), contenant des classes concrètes, des interfaces, des classes abstraites et des annotations.
 
 Cependant, l’organisation du dossier src/test ne reflète pas fidèlement cette architecture.
 
@@ -148,16 +148,31 @@ On observe que le module Gson possède le plus grand nombre de lignes dupliquée
 Cependant, son pourcentage de duplication reste très faible (0,7 %) en raison de la taille importante du module.
 
 À l’inverse, les modules Extra et Metrics présentent un pourcentage plus élevé, ce qui indique une duplication proportionnellement plus importante.
-- étudier si ces duplications peuvent être supprimées et comment
 
 **Analyse de la duplication**
 L’analyse montre que certaines duplications correspondent aux en-têtes de licence Apache présents dans chaque fichier source. Elles ne constituent pas un problème de conception.
 
 Concernant le code métier, certaines structures similaires apparaissent dans la classe TypeAdapters, notamment dans les méthodes read() et write() des différents TypeAdapter. Ces blocs présentent des ressemblances structurelles (gestion du JsonToken.NULL, gestion des exceptions).
 Les modules Extra et Metrics présentent un taux proportionnellement plus élevé (8,7 % et 9,4 %)
+Dans le module extra la duplication se trouve dans extras/src/main/java/com.google.java/typeadapters/UtcDateTypeAdapter.java avec une proportion de 42% 
+
 ### Code déprécié
-L’analyse SonarQube indique la présence d’éléments dépréciés dans le projet.
+L’analyse SonarQube indique la présence d’éléments dépréciés dans le projet sous la notation `@deprecated`
 
 Un élément déprécié correspond à une méthode ou une classe marquée comme obsolète, généralement parce qu’une alternative plus récente ou plus performante existe.
 
+**Les éléments dépréciés**
+class com/google/gson/stream/JsonReader.java methode `setLenient` elle n'est pas appelé par d'autres méthodes (aucune utilisation)
 
+class com/google/gson/stream/JsonWriter.java methode `setLenient` @deprecated aucune utilisation
+
+class com/google/gson/Gson.java methode `excluder` @deprecated aucune utilisation
+
+
+## Nettoyage de Code et Code smells
+
+### Règle de nommage
+Dans ce projet 
+
+ 
+### Nombre magique 
