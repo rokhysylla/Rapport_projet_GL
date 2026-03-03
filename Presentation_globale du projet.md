@@ -1,5 +1,29 @@
-## Présentation et utilité du projet GSON
-### Présentation
+# Présentation et utilité du projet GSON
+## Périmètre de l’analyse
+Le projet Gson est structuré en plusieurs modules :
+
+gson
+
+extras
+
+metrics
+
+proto
+
+test-shrinker
+
+test-graal-native-image
+
+test-jpms
+
+Cependant, en raison de la taille du projet et du temps imparti, l’analyse approfondie s’est principalement concentrée sur le module principal :
+ `gson/src/main/java/com.google.gson`
+
+Ce module contient le cœur fonctionnel de la bibliothèque (sérialisation et désérialisation JSON) et représente la majorité du code ainsi que la majorité des tests (environ 98 %).
+
+Les autres modules ont été analysés de manière plus globale (tests, duplication, structure).
+
+## Présentation
 Gson est une bibliothèque Java développée par Google qui permet de convertir des objets Java en JSON et inversement.
 Plus explicitement ,elle sert à:
 **transformer des objets Java en texte JSON (sérialisation)**
@@ -89,7 +113,7 @@ Les autres modules présentent un nombre très faible de tests, ce qui suggère 
 `Organisation`
 Bien que le projet comporte un nombre très important de tests, leur organisation structurelle présente certaines limites.
 
-Dans le module JSON, le dossier src/main est structuré en plusieurs sous-packages (bin, util, reflect, sql, stream, etc.), contenant des classes concrètes, des interfaces, des classes abstraites et des annotations.
+Dans le module gson, le dossier src/main est structuré en plusieurs sous-packages (com.google.gson, reflect, stream, etc.), contenant des classes concrètes, des interfaces, des classes abstraites et des annotations.
 
 Cependant, l’organisation du dossier src/test ne reflète pas fidèlement cette architecture.
 
@@ -100,17 +124,23 @@ quelle classe est testée,
 dans quel module logique elle appartient,
 et si toutes les classes possèdent un test associé.
 `Classes non testées`
-Certaines classes présentes dans src/main ne disposent pas de classes de tests correspondantes.C'est le cas des classes se trouvant dans le  modules metric
+
+Aucune classe de test correspondante n’a été identifiée pour les classes présentes dans ``metrics/src/main/`
 
 `Nombre d’assertions dans certaines méthodes`
+
 On observe que certaines méthodes de test contiennent plusieurs assertions.
 En théorie, un test devrait vérifier un comportement précis.
 Un test = un comportement vérifié
-test/com.google.gson/GsonTest
+C'est le cas de la classe test/com.google.gson/GsonTest
+
+![exemple de test ](images/moreAssert.png)
 
 `Présence de classes non destinées aux tests dans src/test`
-On remarque que dans le dossier src/test, certaines classes ont été créées et ne correspondent pas à des classes de test. EXemple dans test/com.google.gson/GsonTypeAdapterTest et test/com.google.gson/GsonTest
-Et de la classe test/com.google.gson/primitiveTypeAdapter
+
+On remarque que dans le dossier src/test, certaines classes ont été créées et ne correspondent pas à des classes de test.
+ EXemple dans test/com.google.gson/GsonTypeAdapterTest et test/com.google.gson/GsonTest On y retrouve des classes et et des methodes qui ne sont pas des tests
+Et de la classe primitiveTypeAdapter qui se trouve dans le package test/com.google.gson/
 
 Cela peut poser plusieurs problèmes :
 
@@ -132,10 +162,11 @@ On distingue :
 - Des commentaires Javadoc documentant les méthodes et paramètres.
 
 - Des commentaires de licence et de copyright en en-tête des fichiers.
-    Dans les classes du package gson/com.google.gson.internal.bind 
+    Dans les classes du package gson/com.google.gson/internal/bind 
 
 - Des lignes de code commentées (code désactivé).
-DDans la classe com.google.gson/Gson.java par exemple
+ Par exemple dans : gson/src/main/java/com.google.gson/Gson.java 
+ On y observe des blocs de code commentés qui réduisent la lisibilité.
 
 **Petite conclusion**
 Bien que le taux de commentaires soit élevé quantitativement, une partie significative ne contribue pas directement à la documentation fonctionnelle du projet.
@@ -152,16 +183,34 @@ On observe que le module Gson possède le plus grand nombre de lignes dupliquée
 Cependant, son pourcentage de duplication reste très faible (0,7 %) en raison de la taille importante du module.
 
 À l’inverse, les modules Extra et Metrics présentent un pourcentage plus élevé, ce qui indique une duplication proportionnellement plus importante.
-- étudier si ces duplications peuvent être supprimées et comment
 
 **Analyse de la duplication**
 L’analyse montre que certaines duplications correspondent aux en-têtes de licence Apache présents dans chaque fichier source. Elles ne constituent pas un problème de conception.
 
 Concernant le code métier, certaines structures similaires apparaissent dans la classe TypeAdapters, notamment dans les méthodes read() et write() des différents TypeAdapter. Ces blocs présentent des ressemblances structurelles (gestion du JsonToken.NULL, gestion des exceptions).
 Les modules Extra et Metrics présentent un taux proportionnellement plus élevé (8,7 % et 9,4 %)
+Un taux de duplication élevé (42 %) a été détecté dans :
+`extras/src/main/java/com.google.gson/typeadapters/UtcDateTypeAdapter.java`
+
 ### Code déprécié
-L’analyse SonarQube indique la présence d’éléments dépréciés dans le projet.
+L’analyse SonarQube indique la présence d’éléments dépréciés dans le projet sous la notation `@deprecated`
 
 Un élément déprécié correspond à une méthode ou une classe marquée comme obsolète, généralement parce qu’une alternative plus récente ou plus performante existe.
 
+**Les éléments dépréciés**
+La méthode `setLenient()` est marquée comme dépréciée dans com.google.gson/stream/JsonReader.java . elle n'est pas appelé par d'autres méthodes (aucune utilisation)
+Meme chose pour:
 
+com.google.gson/stream/JsonWriter.java methode `setLenient` @deprecated aucune utilisation
+com.google.gson/Gson.java methode `excluder` @deprecated aucune utilisation
+com.google.gson/JsonParser 4 méthodes deprecated   aucune utilisation
+
+![exemple marquée @Deprecated](images/deprecated.png)
+
+## Nettoyage de Code et Code smells
+
+### Règle de nommage
+Dans ce projet 
+
+ 
+### Nombre magique 
