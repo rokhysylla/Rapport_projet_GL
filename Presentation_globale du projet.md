@@ -173,7 +173,7 @@ On distingue :
  Par exemple dans : gson/src/main/java/com.google.gson/Gson.java 
  On y observe des blocs de code commentés qui réduisent la lisibilité.
 
- ![ portion de code commenté](images/commentaire)
+ ![ portion de code commenté](images/commentaire.png)
 
 **Petite conclusion**
 Bien que le taux de commentaires soit élevé quantitativement, une partie significative ne contribue pas directement à la documentation fonctionnelle du projet.
@@ -246,7 +246,7 @@ gson/src/test/java/
 ne correspondent pas directement à une classe unique du dossier :
 gson/src/main/java/
 C'est le cas des classes de test suivant:
-![exemple](image/package.pnj)
+![exemple](images/package.png)
 
 - ne correspondent pas strictement à une seule classe,
 
