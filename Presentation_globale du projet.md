@@ -25,10 +25,11 @@ Les autres modules ont été analysés de manière plus globale (tests, duplicat
 
 ## Présentation
 Gson est une bibliothèque Java développée par Google qui permet de convertir des objets Java en JSON et inversement.
-Plus explicitement ,elle sert à:
-**transformer des objets Java en texte JSON (sérialisation)**
+Plus explicitement,elle sert à:
 
-**reconstruire des objets Java à partir du JSON (désérialisation)**
+- **transformer des objets Java en texte JSON (sérialisation)**.
+
+- **reconstruire des objets Java à partir du JSON (désérialisation)**.
 
 ### Les fonctionnalités principales
 Les principales fonctionnalités de Gson sont :
@@ -59,8 +60,8 @@ Cependant celui-ci ne décrit pas en détail l’architecture interne ni les cho
 
 La principale source d’information disponible est une documentation partielle décrivant l’objectif général de la bibliothèque, mais sans fournir de détails sur l’architecture interne ou la structure du code.
 
-## Historique du logiciel 
-### Analyse du git 
+### Historique du logiciel 
+#### Analyse du git 
 Lors de l’analyse du dépôt GitHub,nous avons vu que ce projet dispose de trois contributeurs.
 Le projet est actuellement en mode maintenance,il est d'ailleurs toujours actif .
 Le dépôt contient environ dix branches. La branche principale main est active et contient les versions officielles du projet.  
@@ -84,7 +85,8 @@ Au total, le projet comporte :
 0 échec
 19 tests ignorés (skipped)
 L’absence d’erreurs et d’échecs indique une bonne stabilité des tests existants.
-**Repartition des tests par module**
+
+#### Repartition des tests par module**
 - Gson (JSON)	4536 test unitaires soit un ratio de 4536/113​=40.14 environ 40 test par classe
 
 - Extra	40 test unitaires soit un ratio de 40/14 = 2.85 environ 3 test par classe
@@ -95,7 +97,7 @@ Les modules Test-Graal-Native et Test-JPMS contiennent respectivement 10 et 12 t
 
 - le module test-shrinker contient 33 classes, mais aucun test associé n’a été identifié, ce qui constitue un point faible en termes de couverture et de validation.
 
-**Répartition des classes**
+#### Répartition des classes
 - Le projet contient 185 classes principales, réparties comme suit :
 113 dans le module Gson
 14 dans extras
@@ -109,8 +111,10 @@ Le ratio moyen global est :
 Cependant On constate que près de 98 % des tests sont concentrés dans le module Gson (JSON).
 Les autres modules présentent un nombre très faible de tests, ce qui suggère un déséquilibre dans la stratégie de validation.
 
-**Structuration des tests**
-`Organisation`
+#### Structuration des tests
+
+**Organisation**
+
 Bien que le projet comporte un nombre très important de tests, leur organisation structurelle présente certaines limites.
 
 Dans le module gson, le dossier src/main est structuré en plusieurs sous-packages (com.google.gson, reflect, stream, etc.), contenant des classes concrètes, des interfaces, des classes abstraites et des annotations.
@@ -123,11 +127,12 @@ Il est donc difficile d’identifier précisément :
 quelle classe est testée,
 dans quel module logique elle appartient,
 et si toutes les classes possèdent un test associé.
-`Classes non testées`
+
+#### Classes non testées
 
 Aucune classe de test correspondante n’a été identifiée pour les classes présentes dans ``metrics/src/main/`
 
-`Nombre d’assertions dans certaines méthodes`
+#### Nombre d’assertions dans certaines méthodes
 
 On observe que certaines méthodes de test contiennent plusieurs assertions.
 En théorie, un test devrait vérifier un comportement précis.
@@ -136,7 +141,7 @@ C'est le cas de la classe test/com.google.gson/GsonTest
 
 ![exemple de test ](images/moreAssert.png)
 
-`Présence de classes non destinées aux tests dans src/test`
+#### Présence de classes non destinées aux tests dans src/test
 
 On remarque que dans le dossier src/test, certaines classes ont été créées et ne correspondent pas à des classes de test.
  EXemple dans test/com.google.gson/GsonTypeAdapterTest et test/com.google.gson/GsonTest On y retrouve des classes et et des methodes qui ne sont pas des tests
@@ -167,6 +172,8 @@ On distingue :
 - Des lignes de code commentées (code désactivé).
  Par exemple dans : gson/src/main/java/com.google.gson/Gson.java 
  On y observe des blocs de code commentés qui réduisent la lisibilité.
+
+ ![ portion de code commenté](images/commentaire)
 
 **Petite conclusion**
 Bien que le taux de commentaires soit élevé quantitativement, une partie significative ne contribue pas directement à la documentation fonctionnelle du projet.
@@ -210,7 +217,42 @@ com.google.gson/JsonParser 4 méthodes deprecated   aucune utilisation
 ## Nettoyage de Code et Code smells
 
 ### Règle de nommage
-Dans ce projet 
+L’analyse des règles de nommage du projet montre globalement un respect des bonnes pratiques recommandées en génie logiciel.
+#### Nommage des classes
 
+Les classes du module principal présentent des noms :
+descriptifs
+explicites
+cohérents avec leur responsabilité
+
+#### Nommage des méthodes et attributs
+
+Les méthodes analysées possèdent des noms :
+verbaux et explicites (fromJson, toJson, deepCopy, etc.)
+conformes aux conventions Java (camelCase)
+cohérents avec leur comportement
+
+Les attributs observés sont également explicites et ne génèrent pas d’ambiguïté.
  
+#### nommage des classes de test
+Cependant, une légère incohérence est observée concernant les classes de test.
+
+En principe, une classe de test reprend le nom exact de la classe testée en ajoutant le suffixe Test.
+
+Exemple recommandé :  Gson.java -> GsonTest.java     , sonReader.java -> JsonReaderTest.java
+Or, dans le projet, certaines classes présentes dans :
+gson/src/test/java/
+
+ne correspondent pas directement à une classe unique du dossier :
+gson/src/main/java/
+C'est le cas des classes de test suivant:
+![exemple](image/package.pnj)
+
+- ne correspondent pas strictement à une seule classe,
+
+- portent des noms moins directement traçables.
+
 ### Nombre magique 
+L'analyse des classes ne montre pas de nombre magique .
+
+Parmis les classes contenant des valeurs numériques on a la classe `gson/src/main/java/com.google.gson/stream/JsonReader` dont les nombres sont encapsulés dans des constantes static final avec des noms explicites donc pas magique
