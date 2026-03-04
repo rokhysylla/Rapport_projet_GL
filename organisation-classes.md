@@ -1,7 +1,7 @@
 ### 3.4 Organisation des classes
 
-Pour analyser l’organisation des classes, je me suis appuyé sur les classes compilées présentes dans les répertoires target/classes et target/test-classes.
-Au total, j’ai identifié 264 classes uniques.
+Pour analyser l’organisation des classes, je me suis appuyé sur les classes compilées présentes dans les répertoires target/classes et target/test-classes,qui sont créées localement après compilation.
+Au total, j’ai identifié 264 classes uniques avec l'outil jdeps de Oracle Cloud.
 
 ### 3.4.1 Analyse de la hiérarchie
 
@@ -43,7 +43,7 @@ J’ai mesuré la cohésion interne de trois paquetages représentatifs :
 - com.google.gson.internal : cohésion = 0,20
 - com.google.gson.internal.bind : cohésion = 0,171
 
-Le paquetage principal (com.google.gson) présente la meilleure cohésion. Les classes qui le composent collaborent davantage entre elles.
+Le paquetage principal (com.google.gson) présente la meilleure cohésion car les classes qui le composent collaborent davantage entre elles.
 
 Les paquetages internes ont une cohésion plus faible. Cela s’explique par leur rôle technique : ils servent d’infrastructure et interagissent avec plusieurs autres composants (adaptateurs, lecteurs, writers, réflexion).
 
@@ -55,4 +55,4 @@ L’organisation des classes montre :
 - Un noyau central avec une classe fortement structurante
 - Un couplage important mais cohérent avec le rôle du projet
 - Une cohésion plus forte au niveau de l’API publique que dans les couches internes
-L’architecture globale est donc cohérente avec celle d’une bibliothèque de sérialisation modulaire, centralisée autour d’un moteur interne solide.
+L’architecture globale est donc cohérente avec celle d’une bibliothèque de sérialisation modulaire, centralisée autour d’un moteur interne.
