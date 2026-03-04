@@ -1,6 +1,9 @@
+# Introduction
+Cette analyse se focalise sur les 4 classes qui ont le plus de code smells selon sonarQube.
 ### 5.3 Structure du code - Analyse de TypeAdapters.java
+1. `gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java`
 
-En regardant la structure globale de TypeAdapters, je vois que c’est une classe utilitaire “catalogue” : beaucoup de public static final (adapters et factories), puis quelques classes  ou méthodes utilitaires (FloatAdapter, DoubleAdapter, checkValidFloatingPoint, newFactory(...), newTypeHierarchyFactory(...)). Sur le premier critère, il n’y a pas vraiment de variables d’instance (la classe est final avec constructeur privé), donc le point “toutes les variables d’instance ensemble en début de classe” ne s’applique presque pas. En revanche, les champs statiques sont bien regroupés : on a une grande zone de constantes, ce qui reste cohérent et prévisible à lire.
+En regardant la structure globale de TypeAdapters, je vois que c’est une classe utilitaire : beaucoup de public static final (adapters et factories), puis quelques classes  ou méthodes utilitaires (FloatAdapter, DoubleAdapter, checkValidFloatingPoint, newFactory(...), newTypeHierarchyFactory(...)). Sur le premier critère, il n’y a pas vraiment de variables d’instance (la classe est final avec constructeur privé), donc le point “toutes les variables d’instance ensemble en début de classe” ne s’applique presque pas. En revanche, les champs statiques sont bien regroupés : on a une grande zone de constantes, ce qui reste cohérent et prévisible à lire.
 
 Pour l’ordre des méthodes, je trouve que les éléments les plus “publics” (les adapters et factories directement consommables) sont placés assez haut, ce qui aide l’utilisateur du code. Les méthodes utilitaires comme checkValidFloatingPoint et les helpers newFactory(...) et newTypeHierarchyFactory(...) sont plutôt en bas, ce qui correspond bien à l’idée “API visible en haut, détails en bas”. Le point qui rend la lecture plus lourde, c’est surtout que les helpers (newFactory et variantes) sont très importants pour comprendre le mécanisme, mais ils arrivent assez tard : quand je lis le fichier pour la première fois, je vois plein de *_FACTORY = newFactory(...) avant de voir comment newFactory marche réellement.
 
@@ -9,6 +12,7 @@ Si je devais améliorer la structure sans changer le fond, je proposerais une or
 
 
 ### 5.3 Structure du code - Analyse de LinkedTreeMap.java
+2. `gson/src/main/java/com/google/gson/internal/LinkedTreeMap.java`
 
 En analysant la structure de LinkedTreeMap, je vois que la classe respecte assez bien la logique “champs puis comportements”. Les variables d’instance principales (comparator, allowNullValues, root, size, modCount, header) sont regroupées en début de classe, ce qui rend l’état interne facile à repérer. J’apprécie aussi que header soit positionné près des autres champs avec un commentaire qui explique son rôle pour l’ordre d’itération, donc l’intention est claire dès le début.
 
@@ -23,6 +27,7 @@ En conclusion, la structure est plutôt propre : champs en haut, API Map accessi
 
 
 ### 5.3 Structure du code - Analyse de GsonTypes.java
+3. `gson/src/main/java/com/google/gson/internal/GsonTypes.java`
 
 Quand je regarde la structure de GsonTypes, je vois une classe utilitaire assez classique : une constante (EMPTY_TYPE_ARRAY) placée en haut, un constructeur privé pour empêcher l’instanciation, puis une série de méthodes public static qui forment l’API “types” de Gson. Sur le critère des variables d’instance, il n’y en a pas, donc la règle “toutes les variables d’instance ensemble en début de classe” n’est pas vraiment applicable. Par contre, les constantes et la logique d’initialisation sont bien au début, ce qui rend le contexte clair.
 
@@ -35,6 +40,7 @@ Si je devais proposer une amélioration structurelle, je regrouperais davantage 
 
 
 ### 5.3 Structure du code - ParseBenchmark.java
+4. `metrics/src/main/java/com/google/gson/metrics/ParseBenchmark.java`
 
 Dans ParseBenchmark, la structure générale est assez logique mais un peu chargée. Les deux champs d’instance (text et parser) sont bien regroupés après les enums, ce qui respecte la règle “variables d’instance ensemble”. Les enums Document et Api sont placés en haut, ce qui est cohérent car ils structurent tout le benchmark. Les méthodes principales utilisées par Caliper (setUp, timeParse, main) sont aussi placées relativement haut, donc l’API visible est facile à repérer.
 
