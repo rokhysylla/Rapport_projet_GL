@@ -12,9 +12,9 @@ Cela montre que le projet est relativement bien segmenté, sans être éclaté e
 
 ### Méthode utilisée
 
-Plutôt que d'analyser uniquement les import dans le code source, on a utilisé l'outil jdeps sur le JAR compilé. Cette méthode est plus fiable, car elle révèle les dépendances réellement présentes après compilation.
+Plutôt que d'analyser uniquement les imports dans le code source, on a utilisé l'outil jdeps sur le JAR compilé , une commande lancée depuis la racine du projet, qui montre la hiérarchie des packages et les dépendances entre les fichiers java. Cette méthode est plus fiable, car elle révèle les dépendances réellement présentes après compilation.
 
-À partir des résultats, on a identifié 83 liaisons entre paquetages, ce qui permet de visualiser le niveau d'interconnexion.
+À partir des résultats, on a identifié 83 liaisons entre paquetages, ce qui permet de visualiser le niveau d'interconnexion suivant: 
 
 ### Qui dépend de qui ?
 
@@ -26,7 +26,7 @@ On distingue deux catégories importantes.
 - **com.google.gson** : 15 dépendances sortantes.
 
 Cela s'explique logiquement :
-- internal.bind gère le binding objet ↔ JSON, donc il interagit avec beaucoup d'éléments.
+- internal.bind gère le binding objet JSON, donc il interagit avec beaucoup d'éléments.
 - com.google.gson constitue le cœur de l'API.
 
 #### Les paquetages les plus sollicités (beaucoup de liens entrants)
@@ -38,14 +38,15 @@ Ce sont les fondations du projet. Les autres modules s'appuient largement dessus
 
 ### Organisation en couches
 
-Sur le plan théorique, le projet est structuré en deux grandes zones :
+Sur le plan théorique, le projet est structuré en deux grandes couches :
 
 - L'API publique (com.google.gson)
-- L'implémentation interne (internal.*)
+- L'implémentation interne une sous couche de com.google.gson (internal.*)
 
-Cependant, l'analyse montre que l'API publique dépend directement de la partie interne. On n'est donc pas dans une architecture strictement stratifiée.
+En pratique,
 
-On peut parler d'architecture semi-stratifiée : la séparation existe, mais les couches ne sont pas totalement indépendantes.
+Cependant, l'analyse utilisée avec jdeps montre que l'API publique dépend directement de la partie interne. On n'est donc pas dans une architecture strictement stratifiée.
+
 
 ### Dépendances cycliques
 
@@ -74,14 +75,13 @@ En analysant les déclarations package, on obtient :
 - Maximum : 6 niveaux
 - Moyenne : environ 3,8 niveaux
 
-Exemple typique : `com.google.gson.internal.bind`
+Exemple typique sur ce package `com.google.gson.internal.bind`,
+la profondeur maximale reste raisonnable. On n'observe pas de sur-segmentation excessive.
 
-La profondeur maximale reste raisonnable. On n'observe pas de sur-segmentation excessive.
-
-### Alignement tests / sources
+### Alignement tests et sources
 
 Comparaison entre src/main/java et src/test/java :
-
+Depuis la racine, je compte : 
 - 16 packages côté main
 - 20 packages côté test
 - 12 packages communs
@@ -90,17 +90,14 @@ Comparaison entre src/main/java et src/test/java :
 
 La majorité des tests suivent la hiérarchie des sources, ce qui est une bonne pratique.
 
-Les packages supplémentaires côté test (ex : functional, integration, native_test, jpms_test) correspondent à des tests spécialisés. Ce n'est pas un désordre, mais une extension logique.
+Les packages supplémentaires côté test (ex : functional, integration, native_test, jpms_test) correspondent à des tests spécialisés.
 
 ### Paquetages conteneurs sans classes
 
-Trois cas détectés :
+Un cas détecté:
+- com.google.test-jpms
 
-- com
-- com.google
-- com.google.gson.extras.examples
-
-Ces packages servent uniquement de conteneurs hiérarchiques. Ce n'est pas un problème architectural.
+C'est un package qui ne contient pas de classes.
 
 ## 3.2.4 Analyse des noms de paquetages
 
@@ -114,7 +111,7 @@ On ne retrouve aucun nom du type :
 - model
 - view
 
-Conclusion : le projet ne suit pas un modèle MVC, ce qui est cohérent. Gson est une bibliothèque technique, pas une application web.
+Conclusion : le projet ne suit pas un modèle MVC, ce qui est cohérent. Gson est plus une bibliothèque technique qu'une application web.
 
 ### Lien avec une base de données ?
 
@@ -125,19 +122,19 @@ Aucun paquetage du type :
 - jdbc
 - database
 
-Le paquetage internal.sql ne correspond pas à une couche d'accès aux données, mais à la gestion de types SQL pour la sérialisation.
+Le paquetage qui a un lien avec des bases de données `gson.internal.sql` ne correspond pas à une couche d'accès aux données, mais à la gestion de types SQL pour la sérialisation.
 
 Il n'y a donc pas d'architecture orientée base de données.
 
 ### Ce que révèlent les noms
 
 - **internal** : Cela montre une séparation claire entre API publique et implémentation interne. C'est conforme au principe d'encapsulation.
-- **bind** : Indique un mécanisme de binding objet ↔ JSON. Cela suggère des patterns de type Adapter ou Strategy.
+- **bind** : Indique un mécanisme de binding objet JSON. Cela suggère des patterns de type Adapter ou Strategy.
 - **reflect** : Indique l'usage intensif de la réflexion Java.
 - **stream** : Montre l'existence d'une API bas niveau orientée flux.
 - **annotations** : Indique une configuration déclarative via annotations personnalisées.
 
-### Synthèse
+### Synthèse et Conclusion
 
 Les paquetages montrent :
 
@@ -146,4 +143,4 @@ Les paquetages montrent :
 - Une organisation par responsabilités fonctionnelles.
 - Une utilisation forte de réflexion, binding et annotations.
 
-Malgré quelques cycles internes, la structure reste globalement cohérente et maîtrisée.
+Malgré quelques cycles internes, la structure reste globalement cohérente.
